@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# Archivo principal
 
 from random import randint, sample
 
