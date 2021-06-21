@@ -2,6 +2,8 @@
 
 from random import randint, sample
 
+#import jugador
+
 dicc = {}
 
 file = open("DDBB.txt", encoding="UTF-8")
@@ -16,6 +18,8 @@ for linea in file:
 file.close()
 
 while True:
+    #num = jugador.jugador1.num_players
+    #print(num)
     num_players = int(input("Ingrese # jugadores"))
     if num_players < 3:
         print('Debe ingresar como mínimo 3 jugadores')
@@ -68,6 +72,7 @@ for i in range(len(x)):
 #######################################
 
 continuar = 1
+lista = list(range(game["num_players"]))
 while continuar:
     input("Ingrese una tecla para continuar")
 
@@ -106,37 +111,50 @@ while continuar:
                 print(" " * (tama + 1), end="")
         print("|")
 
-    lista = list(range(game["num_players"]))
     ran_list = []
     itera = len(lista)
+    copia = lista[:]
     for i in range(itera):
-        ran_num = sample(lista, 1)[0]
-        index = lista.index(ran_num)
-        ran_list.append(lista[index])
-        lista.remove(ran_num)
+        ran_num = sample(copia, 1)[0]
+        index = copia.index(ran_num)
+        ran_list.append(copia[index])
+        copia.remove(ran_num)
 
-    copia = ran_list[:]
-    for i in copia:
+    for i in ran_list:
         if game["jug"][i]["conductor"]["pos"] == tamano_pista:
             orden = game["ganadores"]["orden"]
             game["ganadores"][orden] = i + 1
             game["jugadas"][i + 1][orden] += 1
             game["ganadores"]["orden"] += 1
-            ran_list.remove(i)
+            lista.remove(i)
 
         if game["ganadores"]["orden"] == 4:
             continuar = 0
             break
 
-print("Ganadores:")
+print("-----------PODIO------------")
+print('\n')
+for i in range(3):
+    print((' '*6)+('*'*6))
+for i in range(3):
+    print(('*'*18))
+
+print('\n')
 print("Primer lugar:", "J" + str(game["ganadores"][1]))
 print("segundo lugar:", "J" + str(game["ganadores"][2]))
 print("tercer lugar:", "J" + str(game["ganadores"][3]))
 
-file = open("rata.txt", "w", encoding="UTF-8")
+file = open("DDBB.txt", "w", encoding="UTF-8")
 
 for L in game["jugadas"]:
     file.write(f"{L}:{game['jugadas'][L][1]},{game['jugadas'][L][2]},{game['jugadas'][L][3]}\n")
+
+file.close()
+
+print("Jugadores y veces ganadas según la posicion")
+print("Jugador: #veces primer puesto, #veces segundo puesto, #veces tercer puesto, ")
+file = open("DDBB.txt", "r")
+print(file.read())
 
 file.close()
 
